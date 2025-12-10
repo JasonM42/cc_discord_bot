@@ -1,0 +1,5 @@
+.env
+/.env
+/Bot/Guilds/
+/Bot/data
+discord_bot.log
