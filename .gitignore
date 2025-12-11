@@ -1,7 +1,7 @@
 .env
 /.env
 /Bot/Guilds/
-/Bot/data
 __pycache__/
 *.pyc
 discord_bot.log
+google-service-credentials.json
