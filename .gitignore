@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 discord_bot.log
 google-service-credentials.json
+.DS_Store

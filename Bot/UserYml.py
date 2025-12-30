@@ -56,7 +56,7 @@ class UserYml(yaml.YAMLObject):
 
     def update_file(self, guild: discord.Guild):
 
-        guild_path = os.path.abspath(os.path.relpath(f'Bot\\Guilds\\{guild.id}'))
+        guild_path = os.path.abspath(os.path.relpath(os.path.join('Bot', 'Guilds', str(guild.id))))
         user_path = os.path.join(guild_path, str(self.uid))
         with open(f'{user_path}.yml', "w") as user_file:
             user_file.write(yaml.dump(self))
@@ -76,7 +76,7 @@ class UserYml(yaml.YAMLObject):
 
     @staticmethod
     def get_user_file(guild: discord.Guild, member: discord.Member):
-        dir_path = os.path.abspath(os.path.relpath(f'Bot\\Guilds\\{guild.id}\\{member.id}.yml'))
+        dir_path = os.path.abspath(os.path.relpath(os.path.join('Bot', 'Guilds', str(guild.id), str(member.id)+".yml")))
         return dir_path
 
     @classmethod

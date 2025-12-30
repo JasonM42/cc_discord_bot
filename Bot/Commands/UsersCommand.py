@@ -45,7 +45,7 @@ class UsersCommand(Command):
     @classmethod
     def safe_reload(cls, guild):
         """Reload done to make user files for anyone that joined while the bot was offline."""
-        guild_path = os.path.abspath(os.path.relpath(f'Bot\\Guilds\\{guild.id}'))
+        guild_path = os.path.abspath(os.path.relpath(os.path.join('Bot', 'Guilds', str(guild.id))))
         for member in guild.members:
             user_path = os.path.join(guild_path, f'{member.id}.yml')
             if not os.path.exists(user_path):
@@ -54,7 +54,7 @@ class UsersCommand(Command):
     @classmethod
     def add_user(cls, guild, member, user_path=None):
         if user_path is None:
-            guild_path = os.path.abspath(os.path.relpath(f'Bot\\Guilds\\{guild.id}'))
+            guild_path = os.path.abspath(os.path.relpath(os.path.join('Bot', 'Guilds', str(guild.id))))
             user_path = os.path.join(guild_path, f'{member.id}.yml')
         with open(user_path, "w") as user_file:
             user = UserYml.create_user_from_member(member)
