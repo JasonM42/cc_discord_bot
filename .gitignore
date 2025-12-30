@@ -6,3 +6,4 @@ __pycache__/
 discord_bot.log
 google-service-credentials.json
 .DS_Store
+*.pkl
