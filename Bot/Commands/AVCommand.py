@@ -41,8 +41,13 @@ class AVCommand(Command):
     async def send_message(self, channel, message: str, *args):
         await channel.send(message)
 
-    async def send_to_wenrith(self, message, *args):
-        await self.client.fetch_user(WENRITH_UID).send(message)
+    async def send_to_wenrith(self, message: str, *args):
+        # Send a message to both me and wenrith. (I want to see the message to ensure it's working right)
+        darkfyre = await self.client.fetch_user(int(DARKFYRE_UID))
+        await darkfyre.send(message)
+
+        wenrith = await self.client.fetch_user(int(WENRITH_UID))
+        await wenrith.send(message)
 
 
 # If the user is not Wenrith or Me
@@ -106,6 +111,8 @@ class GrdnData(AVCommand):
                         await self.list_data(message)
                 case "delete":
                     await self.delete_data(message, split_cmd)
+                case "unlock":
+                    await self.unlock_key(message, split_cmd)
                 case _:
                     await self.send_message(message.channel, f"Command `{cmd}` is invalid."
                                                              f"Use `!cc av grdn help` to list commands.")
@@ -150,6 +157,7 @@ class GrdnData(AVCommand):
 
         if added_data:
             upload_data(data_dict)
+            await self.send_message(message.channel, f"Data for `{key}` added.")
 
     @restrict_cmd
     async def get_data(self, message, cmd_list):
@@ -214,6 +222,7 @@ class GrdnData(AVCommand):
                 key = cmd_list[2].lower()
                 data_dict[key] = data_dict['data'][cmd_list[2]] + " " + ' '.join(cmd_list[3:])
             upload_data(data_dict)
+            await self.send_message(message.channel, f"Data for {key} updated")
         except KeyError:
             await self.send_message(message.channel, f"There is no data associated with `{key}`")
 
@@ -225,6 +234,7 @@ class GrdnData(AVCommand):
                 key = cmd_list[2].lower()
                 data_dict['data'][key] = ' '.join(cmd_list[3:])
             upload_data(data_dict)
+            await self.send_message(message.channel, f"Data for {key} replaced")
         except KeyError:
             await self.send_message(message.channel, f"There is no data associated with `{key}`")
 
@@ -237,5 +247,26 @@ class GrdnData(AVCommand):
                 data_dict[KNOWN_DATA_KEY].remove(key)
                 del data_dict['data'][key]
             upload_data(data_dict)
+            await self.send_message(message.channel, f"Data for {key} deleted")
         except KeyError:
             await self.send_message(message.channel, f"There is no data associated with `{key}`")
+
+    async def unlock_key(self, message, cmd_list):
+        if message.author.id == int(DARKFYRE_UID):
+            try:
+                with open(GRDN_DATA_PATH, 'rb') as f:
+                    data_dict = pickle.load(f)
+                    key = cmd_list[2].lower()
+                    data = data_dict['data'][key]
+                    if key not in data_dict[KNOWN_DATA_KEY]:
+                        data_dict[KNOWN_DATA_KEY].append(key)
+                        upload_data(data_dict)
+                        await self.send_to_wenrith(f"Key {key} added to known data.")
+                    await self.send_to_wenrith(f"`{key}`: {data}")
+            except KeyError:
+                await self.send_message(message.channel, f"Key `{key}` does not exist")
+
+        else:
+            await self.send_message(message.channel, "You cannot access this command.")
+
+
