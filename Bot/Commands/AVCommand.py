@@ -94,6 +94,8 @@ class GrdnData(AVCommand):
             cmd = split_cmd[1]
 
             match cmd:
+                case "help":
+                    await self.send_help_msg(message)
                 case "add":
                     await self.add_data(message, split_cmd)
                 case "get":
