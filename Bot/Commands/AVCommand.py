@@ -2,6 +2,7 @@ import datetime
 import pickle
 import os
 import discord
+from asyncio import sleep
 from typing import Dict
 
 from Bot.GoogleDataRetrieval import download_pickle, upload_pickle
@@ -115,6 +116,8 @@ class GrdnData(AVCommand):
                     await self.delete_data(message, split_cmd)
                 case "unlock":
                     await self.unlock_key(message, split_cmd)
+                case "activate":
+                    await self.activation_sequence(message)
                 case _:
                     await self.send_message(message.channel, f"Command `{cmd}` is invalid."
                                                              f"Use `!cc av grdn help` to list commands.")
@@ -271,4 +274,43 @@ class GrdnData(AVCommand):
         else:
             await self.send_message(message.channel, "You cannot access this command.")
 
-
+    async def activation_sequence(self, message):
+        if message.author.id == int(DARKFYRE_UID):
+            await self.send_to_wenrith("Gauntlight activation detected.")
+            await sleep(5)
+            await self.send_to_wenrith("Systems powering up")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith("Motor systems online.")
+            await sleep(0.2)
+            await self.send_to_wenrith("Running diagnostic.")
+            await sleep(1)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.2)
+            await self.send_to_wenrith("System degradation detected. Not all functions may be available.")
+            await sleep(2)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(0.2)
+            await self.send_to_wenrith("Error: Cognition systems corrupted. Repairs initialized. This action will "
+                                       "run in the background. Recommend re-visiting sites of importance.")
+            await sleep(2)
+            await self.send_to_wenrith(".")
+            await sleep(0.5)
+            await self.send_to_wenrith(".")
+            await sleep(1)
+            await self.send_to_wenrith("Diagnostic complete. Waking...")
+            await sleep(2)
+            await self.send_to_wenrith("**Directive**: Eliminate Belcorra Haruvex and any associates.")
